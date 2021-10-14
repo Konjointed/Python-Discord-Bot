@@ -16,7 +16,7 @@ client = commands.Bot(
     status = discord.Status.idle,
     intents = intents,
 )
-client.activity = discord.Game(name=f"Watchinver over {str(len(client.guilds))} server(s)")
+client.activity = discord.Game(name=f"Watching over {str(len(client.guilds))} server(s)")
 
 #Load all the cogs in the cog folder
 for FileName in os.listdir("./cogs"):
@@ -34,4 +34,5 @@ async def on_ready():
     print(f"Logged in as {client.user}")
     print(f"Bot is in {str(len(client.guilds))} server(s)")
 
-client.run(getenv("TOKEN"))
+#client.run(getenv("TOKEN"))
+client.run(os.environ["TOKEN"])
