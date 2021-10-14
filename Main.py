@@ -15,6 +15,8 @@ for FileName in os.listdir("./cogs"):
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
+    print(f"Bot is in {str(len(client.guilds))} server(s)")
+    
     await client.change_presence(activity=discord.Game(name="Hello!"))
 
 client.run(getenv("TOKEN"))
