@@ -8,7 +8,11 @@ class Fun(commands.Cog):
         self.client = client
 
     @commands.guild_only()
-    @commands.command()
+    @commands.command(
+        name = "8ball",
+        help = "ask a question!",
+        aliases = ["ask"]
+    )
     async def EightBall(self,ctx,*,question):
         responses = ["It is certain.",
             "It is decidedly so.",

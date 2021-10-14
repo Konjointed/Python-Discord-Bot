@@ -8,8 +8,12 @@ class TestCog(commands.Cog):
 
     @commands.Cog.listener() #this is a decorator for events/listeners
     async def on_message(self,ctx):
+        if ctx.author == self.client.user:
+            return
+
         print("a message was sent")
 
+    @commands.has_role("Admin")
     @commands.command() #for making a command
     async def add(self,ctx):
         self.counter += 1

@@ -12,6 +12,11 @@ for FileName in os.listdir("./cogs"):
     if FileName.endswith(".py"):
         client.load_extension(f"cogs.{FileName[:-3]}")
 
+#global check
+@client.check
+async def globally_block_dms(ctx):
+    return ctx.guild is not None
+
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
