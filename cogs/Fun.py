@@ -7,7 +7,6 @@ class Fun(commands.Cog):
     def __init__(self,client):
         self.client = client
 
-    @commands.guild_only()
     @commands.command(
         name = "8ball",
         help = "ask a question!",
@@ -36,16 +35,22 @@ class Fun(commands.Cog):
             "Very doubtful."]
         await ctx.send(f"Question: {question}\nAnswer: {choice(responses)}")
 
-    @commands.guild_only()
-    @commands.command()
+    @commands.command(
+        name = "dice",
+        help = "roll a di with any number of sides!",
+        aliases = ["roll","di"]
+    )
     async def RollDice(self,ctx,number = 6): #default is 6
         await ctx.send(f"Rolling a {number} sided di")
         await asyncio.sleep(1)
         await ctx.send(f"you rolled a **{randint(1,int(number))}**!")    
 
-    @commands.guild_only()
-    @commands.command()
-    async def Say(self,ctx,msg):
+    @commands.command(
+        name = "repeat",
+        help = "make the bot repeat what you say",
+        aliases = ["say"]
+    )
+    async def Repeat(self,ctx,msg):
         await ctx.send(msg)    
 
 def setup(client):
