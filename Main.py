@@ -1,11 +1,12 @@
 import discord
 import os
 import motor.motor_asyncio
+import random
 import sys
 from discord.ext import commands
 from utils.mongo import Document
 
-sys.dont_write_bytecode = True
+sys.dont_write_bytecode = True #apparently this is how you prevent __pycache__ folders being created?
 
 intents = discord.Intents.default()
 intents.members = True
@@ -34,6 +35,8 @@ client = commands.Bot(
 )
 client.activity = discord.Game(name=f"Watching over {str(len(client.guilds))} server(s)")
 
+client.muted_users = {}
+
 #Load all the cogs in the cog folder
 for FileName in os.listdir("./cogs"):
     if FileName.endswith(".py"):
@@ -53,7 +56,22 @@ async def on_ready():
     #setup mongodb
     client.mongo = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGO"])
     client.db = client.mongo["dbName"]
+    client.mutes = Document(client.db,"mutes")
     client.config = Document(client.db,"config")
     print("Database Initalized")
+
+    current_mutes = await client.mutes.get_all()
+    for mute in current_mutes:
+        client.muted_users[mute["_id"]] = mute
+
+    #Remove any data to the database for servers the bot was removed from when it was offline
+    for document in await client.config.get_all():
+        if not client.get_guild(document["_id"]):
+            await client.config.delete_by_id(document["_id"])
+
+    #Add any data to the database for servers the bot joined while it was offline
+    for guild in client.guilds:
+        if not await client.config.find(guild.id):
+            await client.config.upsert({"_id": guild.id})
 
 client.run(os.environ["TOKEN"])
