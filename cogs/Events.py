@@ -6,6 +6,15 @@ class Events(commands.Cog):
         self.client = client
 
     @commands.Cog.listener()
+    async def on_message(self,ctx):
+        if ctx.author == self.client.user:
+            return
+
+        #reply example
+        if "hello" in ctx.content:
+            await ctx.reply("Hello!")
+
+    @commands.Cog.listener()
     async def on_guild_join(self,guild):
         #create data for the server in the database if it doesn't already exisit
         if not await self.client.config.find(guild.id):

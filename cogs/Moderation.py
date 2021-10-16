@@ -135,6 +135,17 @@ class Moderation(commands.Cog):
 
     @commands.bot_has_permissions(administrator = True)
     @commands.has_permissions(administrator = True)
+    @commands.command()     
+    async def nuke(self,ctx,channel:discord.TextChannel = None):
+            if channel is not None:
+                ChannelToNuke = discord.utils.get(ctx.guild.channels,name=channel.name)
+                await ChannelToNuke.clone(reason="Has been nuked")
+                await ChannelToNuke.delete()
+            else:
+                await ctx.send("Please provide a channel")
+
+    @commands.bot_has_permissions(administrator = True)
+    @commands.has_permissions(administrator = True)
     @commands.command(
         name = "changeprefix",
         help = "change the prefix of the bot",
