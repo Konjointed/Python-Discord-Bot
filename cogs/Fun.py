@@ -1,6 +1,5 @@
 import asyncio
 import os
-from asyncio.windows_events import NULL
 import discord
 import random
 import json
