@@ -58,7 +58,8 @@ async def globally_block_dms(ctx):
 
 @client.command()
 async def presence(ctx,*,text):
-    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=text))
+    if ctx.author.id == 846090348832358441:
+        await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=text))
 
 @client.event
 async def on_ready():
