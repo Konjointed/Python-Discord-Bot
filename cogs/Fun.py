@@ -10,9 +10,9 @@ from discord import Embed
 from discord.ext import commands
 from random import choice, randint
 
-reddit = praw.Reddit(client_id = "Hep_3WWz096efg",
-                     client_secret = "8mbT11XiB6geg-nACN012JsmY1RXlg",
-                     user_agent = "pythonpraw",
+reddit = praw.Reddit(client_id = os.environ["CLIENTID"],
+                     client_secret = os.environ["CLIENTSECRET"],
+                     user_agent = os.environ["USERAGENT"],
                      check_for_async=False)
 
 class Fun(commands.Cog):
