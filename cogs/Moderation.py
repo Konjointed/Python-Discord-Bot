@@ -135,7 +135,11 @@ class Moderation(commands.Cog):
 
     @commands.bot_has_permissions(administrator = True)
     @commands.has_permissions(administrator = True)
-    @commands.command()     
+    @commands.command(
+        name = "nuke", 
+        help = "nuke the channel",
+        aliases = (["snap"])
+    )     
     async def nuke(self,ctx,channel:discord.TextChannel = None):
             if channel is not None:
                 ChannelToNuke = discord.utils.get(ctx.guild.channels,name=channel.name)

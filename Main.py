@@ -1,5 +1,6 @@
 import discord
 import os
+from discord import activity
 import motor.motor_asyncio
 import random
 import sys
@@ -38,6 +39,7 @@ client = commands.Bot(
     command_prefix = GetPrefix,
     case_insenitive = True,
     status = discord.Status.idle, 
+    activity = discord.Activity(type=discord.ActivityType.watching, name="!help"),
     intents = intents,
 )
 
@@ -54,18 +56,21 @@ for FileName in os.listdir("./cogs"):
 async def globally_block_dms(ctx):
     return ctx.guild is not None
 
+@client.command()
+async def presence(ctx,*,text):
+    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=text))
+
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
     print(f"Bot is in {str(len(client.guilds))} server(s)")
-
-    client.activity = discord.Game(name=f"Watching over {str(len(client.guilds))} server(s)")
 
     #setup mongodb
     client.mongo = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGO"])
     client.db = client.mongo["dbName"]
     client.mutes = Document(client.db,"mutes")
     client.config = Document(client.db,"config")
+    client.reminders = Document(client.db,"reminders")
     print("Database Initalized")
 
     current_mutes = await client.mutes.get_all()

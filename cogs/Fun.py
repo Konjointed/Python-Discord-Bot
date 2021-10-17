@@ -1,6 +1,19 @@
 import asyncio
+import os
+from asyncio.windows_events import NULL
+import discord
+import random
+import json
+import praw
+import aiohttp
+from discord import Embed
 from discord.ext import commands
 from random import choice, randint
+
+reddit = praw.Reddit(client_id = "Hep_3WWz096efg",
+                     client_secret = "8mbT11XiB6geg-nACN012JsmY1RXlg",
+                     user_agent = "pythonpraw",
+                     check_for_async=False)
 
 class Fun(commands.Cog):
 
@@ -52,6 +65,64 @@ class Fun(commands.Cog):
     )
     async def Repeat(self,ctx,msg):
         await ctx.send(msg)    
+
+    @commands.command()
+    async def giphy(self,ctx,*,search=None):
+        embed = discord.Embed(colour=discord.Colour.blue())
+        session = aiohttp.ClientSession()
+
+        if not search:
+            response = await session.get(f'https://api.giphy.com/v1/gifs/random?api_key={os.environ["GIPHY"]}')
+            print(response)
+            data = json.loads(await response.text())
+            print(data)
+            embed.set_image(url=data)
+            embed.set_image(url=data['data']['images']['original']['url'])
+        else:
+            search.replace('','+')
+            response = await session.get('http://api.giphy.com/v1/gifs/search?q=' + search + f'&api_key={os.environ["GIPHY"]}&limit=10')
+            data = json.loads(await response.text())
+            gif_choice = random.randint(0, 9)
+            embed.set_image(url=data['data'][gif_choice]['images']['original']['url'])
+
+        await session.close()
+        await ctx.send(embed=embed)
+
+    @commands.command(
+        help = "Sends a random spicy hot meme from r/memes"
+        )
+    async def meme(self,ctx):
+
+        #Create a submmistion to r/test
+        # reddit.subreddit("test").submit("Test submission",url="https://reddit.com")
+
+        # Comment on a known submission
+        # submission = reddit.submission(url="https://www.reddit.com/comments/5e1az9")
+        # submission.reply("Super rad!")
+
+        # Reply to the first comment of a weekly top thread of a moderated community
+        # submission = next(reddit.subreddit("mod").top("week"))
+        # submission.comments[0].reply("An automated reply")
+
+        # Output score for the first 256 items on the frontpage
+        # for submission in reddit.front.hot(limit=256):
+        #     print(submission.score)
+
+        # Obtain the moderator listing for r/redditdev
+        # for moderator in reddit.subreddit("redditdev").moderator():
+        #     print(moderator)
+
+        submissions = reddit.subreddit("memes").hot()
+        post_to_pick = randint(1,100)
+        for i in range(0,post_to_pick):
+            submission = next(x for x in submissions if not x.stickied)
+
+        embed = Embed(title = submission.title,
+                      colour = ctx.message.guild.owner.colour)
+        embed.set_image(url=submission.url)
+        embed.set_footer(text=f"Meme from r/memes")
+
+        await ctx.send(embed=embed)
 
 def setup(client):
     client.add_cog(Fun(client))
