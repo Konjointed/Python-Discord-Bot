@@ -19,6 +19,25 @@ class Fun(commands.Cog):
     def __init__(self,client):
         self.client = client
 
+    @commands.command()
+    async def guess(self,ctx):
+        await ctx.send("Guess a number between 1 and 10")
+
+        def is_correct(msg):
+            return msg.author == ctx.author and msg.content.isdigit()
+
+        answer = random.randint(1,10)
+
+        try:
+            guess = await self.client.wait_for('message', check=is_correct, timeout=5.0)
+        except asyncio.TimeoutError:
+            return await ctx.send(f"Sorry, you took to long it was {answer}")
+
+        if int(guess.content) == answer:
+            await ctx.send("You're right!")
+        else:
+            await ctx.send(f"incorrect loser the answer was {answer}")
+
     @commands.command(
         name = "8ball",
         help = "ask a question!",

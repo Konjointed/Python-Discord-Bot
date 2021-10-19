@@ -35,7 +35,7 @@ async def GetPrefix(client,msg):
     except:
         return commands.when_mentioned_or("!")(client,msg) 
 
-client = commands.Bot(
+client = commands.AutoShardedBot(
     command_prefix = GetPrefix,
     case_insenitive = True,
     status = discord.Status.idle, 
@@ -56,7 +56,7 @@ for FileName in os.listdir("./cogs"):
 async def globally_block_dms(ctx):
     return ctx.guild is not None
 
-@client.command()
+@client.command(hidden=True)
 async def presence(ctx,*,text):
     if ctx.author.id == 846090348832358441:
         await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=text))
