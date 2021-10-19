@@ -1,22 +1,22 @@
-import discord
+import nextcord
 import os
-from discord import activity
+from nextcord import activity
 import motor.motor_asyncio
 import random
 import sys
 import logging
-from discord.ext import commands
+from nextcord.ext import commands
 from utils.mongo import Document
 
 sys.dont_write_bytecode = True #apparently this is how you prevent __pycache__ folders being created?
 
-logger = logging.getLogger('discord')
+logger = logging.getLogger('nextcord')
 logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discord.log',encoding='utf-8',mode='w')
+handler = logging.FileHandler(filename='nextcord.log',encoding='utf-8',mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-intents = discord.Intents.default()
+intents = nextcord.Intents.default()
 intents.members = True
 intents.reactions = True
 intents.messages = True
@@ -38,8 +38,8 @@ async def GetPrefix(client,msg):
 client = commands.AutoShardedBot(
     command_prefix = GetPrefix,
     case_insenitive = True,
-    status = discord.Status.idle, 
-    activity = discord.Activity(type=discord.ActivityType.watching, name="!help"),
+    status = nextcord.Status.idle, 
+    activity = nextcord.Activity(type=nextcord.ActivityType.watching, name="!help"),
     intents = intents,
 )
 
@@ -59,7 +59,7 @@ async def globally_block_dms(ctx):
 @client.command(hidden=True)
 async def presence(ctx,*,text):
     if ctx.author.id == 846090348832358441:
-        await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=text))
+        await client.change_presence(status=nextcord.Status.idle, activity=nextcord.Activity(type=nextcord.ActivityType.watching, name=text))
 
 @client.event
 async def on_ready():

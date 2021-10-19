@@ -1,13 +1,13 @@
 import asyncio
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 from random import choice, randint
 from datetime import datetime,timedelta
-from discord.ext.commands import Greedy
-from discord import Embed, Member
+from nextcord.ext.commands import Greedy
+from nextcord import Embed, Member
 from typing import Optional
 
-from discord.ext.commands.errors import DisabledCommand
+from nextcord.ext.commands.errors import DisabledCommand
 class Utilities(commands.Cog):
 
     def __init__(self,client):

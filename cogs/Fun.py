@@ -1,12 +1,12 @@
 import asyncio
 import os
-import discord
+import nextcord
 import random
 import json
 import praw
 import aiohttp
-from discord import Embed
-from discord.ext import commands
+from nextcord import Embed
+from nextcord.ext import commands
 from random import choice, randint
 
 reddit = praw.Reddit(client_id = os.environ["CLIENTID"],
@@ -86,7 +86,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def giphy(self,ctx,*,search=None):
-        embed = discord.Embed(colour=discord.Colour.blue())
+        embed = nextcord.Embed(colour=nextcord.Colour.blue())
         session = aiohttp.ClientSession()
 
         if not search:

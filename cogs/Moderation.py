@@ -1,12 +1,12 @@
-import discord
+import nextcord
 import asyncio
 from datetime import datetime,timedelta
 from dateutil.relativedelta import relativedelta
-from discord.ext import commands, tasks
+from nextcord.ext import commands, tasks
 from typing import Optional
-from discord.ext.commands import command, has_permissions, bot_has_permissions
-from discord.ext.commands import Cog, Greedy
-from discord import Embed, Member, message
+from nextcord.ext.commands import command, has_permissions, bot_has_permissions
+from nextcord.ext.commands import Cog, Greedy
+from nextcord import Embed, Member, message
 from copy import deepcopy
 
 class Moderation(commands.Cog):
@@ -69,7 +69,7 @@ class Moderation(commands.Cog):
 
     async def mute_members(self,ctx,message,targets,hours,reason):
         unmutes = []
-        mute_role = discord.utils.get(message.guild.roles,name="mute")
+        mute_role = nextcord.utils.get(message.guild.roles,name="mute")
 
         #Make a mute role
         if not mute_role:
@@ -102,7 +102,7 @@ class Moderation(commands.Cog):
         return unmutes
 
     async def unmute_members(self,guild,targets,*,reason="Mute time expired"):
-        mute_role = discord.utils.get(guild.roles,name="mute")
+        mute_role = nextcord.utils.get(guild.roles,name="mute")
 
         for target in targets:
             if mute_role in target.roles:
@@ -140,9 +140,9 @@ class Moderation(commands.Cog):
         help = "nuke the channel",
         aliases = (["snap"])
     )     
-    async def nuke(self,ctx,channel:discord.TextChannel = None):
+    async def nuke(self,ctx,channel:nextcord.TextChannel = None):
             if channel is not None:
-                ChannelToNuke = discord.utils.get(ctx.guild.channels,name=channel.name)
+                ChannelToNuke = nextcord.utils.get(ctx.guild.channels,name=channel.name)
                 await ChannelToNuke.clone(reason="Has been nuked")
                 await ChannelToNuke.delete()
             else:
